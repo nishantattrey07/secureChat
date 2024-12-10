@@ -1,15 +1,22 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Send, Copy, Users } from 'lucide-react';
 import { useWebSocket } from '../hooks/useWebSocket';
 import toast from 'react-hot-toast';
 
 export const ChatRoom: React.FC = () => {
   const { roomId } = useParams<{ roomId: string }>();
+  const navigate = useNavigate();
   const [message, setMessage] = useState('');
   const [username] = useState(() => localStorage.getItem('username') || '');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { messages, isConnected, sendMessage } = useWebSocket(roomId!, username);
+
+  useEffect(() => {
+    if (!username) {
+      navigate(`/join-room/${roomId}`);
+    }
+  }, [username, roomId, navigate]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
