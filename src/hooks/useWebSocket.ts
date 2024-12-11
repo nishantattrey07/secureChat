@@ -7,7 +7,8 @@ export const useWebSocket = (roomId: string, username: string) => {
   const wsRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
-    const ws = new WebSocket(`ws://localhost:8080?roomId=${roomId}&username=${encodeURIComponent(username)}`);
+    const wsUrl = `${import.meta.env.VITE_WS_URL}?roomId=${roomId}&username=${encodeURIComponent(username)}`;
+    const ws = new WebSocket(wsUrl);
     wsRef.current = ws;
 
     ws.onopen = () => {
