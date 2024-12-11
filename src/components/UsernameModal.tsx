@@ -13,7 +13,7 @@ export const UsernameModal: React.FC = () => {
 
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:8080/api/rooms', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/rooms`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -28,7 +28,6 @@ export const UsernameModal: React.FC = () => {
       navigate(`/room/${roomId}`);
     } catch (error) {
       console.log(error);
-      
       toast.error('Failed to create chat room. Please try again.');
     } finally {
       setIsLoading(false);
