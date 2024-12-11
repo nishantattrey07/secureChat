@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run build",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start":"node server.js"
+    "server": "node --loader ts-node/esm src/server/index.ts"
   },
   "dependencies": {
     "cors": "^2.8.5",
