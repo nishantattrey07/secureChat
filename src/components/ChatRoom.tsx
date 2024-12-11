@@ -36,8 +36,33 @@ export const ChatRoom: React.FC = () => {
 
   const copyRoomLink = () => {
     const link = window.location.href;
-    navigator.clipboard.writeText(link);
-    toast.success('Room link copied to clipboard!');
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(link).then(() => {
+        toast.success('Room link copied to clipboard!');
+      }).catch((err) => {
+        console.error('Failed to copy: ', err);
+        fallbackCopyTextToClipboard(link);
+      });
+    } else {
+      fallbackCopyTextToClipboard(link);
+    }
+  };
+
+  const fallbackCopyTextToClipboard = (text: string) => {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';  
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      toast.success('Room link copied to clipboard!');
+    } catch (err) {
+      console.error('Fallback: Oops, unable to copy', err);
+      toast.error('Failed to copy room link.');
+    }
+    document.body.removeChild(textArea);
   };
 
   return (
